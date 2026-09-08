@@ -2,6 +2,11 @@ using UnityEngine;
 
 namespace Factura.Gameplay
 {
+    public enum ControlType
+    {
+        Swipe, Pointer
+    }
+
     [CreateAssetMenu(fileName = "GameConfig", menuName = "Factura/Game Config")]
     public sealed class GameConfig : ScriptableObject
     {
@@ -25,5 +30,6 @@ namespace Factura.Gameplay
         [field: SerializeField] public LayerMask ProjectileHitMask { get; private set; } = ~0;
         [field: SerializeField, Min(1)] public int VehicleHealth { get; private set; } = 100;
         [field: SerializeField, Min(1)] public int EnemyHealth { get; private set; } = 30;
+        [field: SerializeField] public ControlType ControlType { get; private set; } = ControlType.Swipe;
     }
 }

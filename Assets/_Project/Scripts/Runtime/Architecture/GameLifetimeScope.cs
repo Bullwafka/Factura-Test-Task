@@ -22,6 +22,39 @@ namespace Factura.Gameplay
 
         protected override void Configure(IContainerBuilder builder)
         {
+            RegisterInstances(builder);
+            RegisterSystems(builder);
+        }
+
+        private void RegisterSystems(IContainerBuilder builder)
+        {
+            builder.RegisterEntryPoint<PlayerInputService>().As<IPlayerInputService>();
+            builder.RegisterEntryPoint<VehicleMovementSystem>();
+            builder.RegisterEntryPoint<TurretControlSystem>();
+            builder.RegisterEntryPoint<VehicleCameraFollowSystem>();
+            builder.RegisterEntryPoint<ProjectileSystem>().As<IProjectileService>();
+            builder.RegisterEntryPoint<TurretShootingSystem>();
+
+            RegisterAimProvider(builder);
+        }
+
+        private void RegisterAimProvider(IContainerBuilder builder)
+        {
+            switch (_config.ControlType)
+            {
+                case ControlType.Swipe:
+                    builder.Register<SwipeTurretAimProvider>(Lifetime.Singleton).As<ITurretAimProvider>();
+                    break;
+                case ControlType.Pointer:
+                    builder.Register<PointerTurretAimProvider>(Lifetime.Singleton).As<ITurretAimProvider>();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void RegisterInstances(IContainerBuilder builder)
+        {
             builder.RegisterInstance(_config);
             builder.RegisterInstance(_projectilePrefab);
             builder.RegisterInstance(_projectileImpactPrefab);
@@ -32,13 +65,6 @@ namespace Factura.Gameplay
                 _hud,
                 _gameCamera,
                 _projectileRoot));
-
-            builder.RegisterEntryPoint<PlayerInputService>().As<IPlayerInputService>();
-            builder.RegisterEntryPoint<VehicleMovementSystem>();
-            builder.RegisterEntryPoint<TurretControlSystem>();
-            builder.RegisterEntryPoint<VehicleCameraFollowSystem>();
-            builder.RegisterEntryPoint<ProjectileSystem>().As<IProjectileService>();
-            builder.RegisterEntryPoint<TurretShootingSystem>();
         }
     }
 }

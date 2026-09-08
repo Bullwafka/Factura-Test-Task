@@ -18,7 +18,7 @@ MonoBehaviour:
   <VehicleLateralSpeed>k__BackingField: 0.25
   <VehicleLateralPauseRange>k__BackingField: {x: 5, y: 10}
   <VehicleLateralDurationRange>k__BackingField: {x: 1, y: 2.5}
-  <TurretTurnSpeed>k__BackingField: 360
+  <TurretTurnSpeed>k__BackingField: 180
   <TurretDragAngle>k__BackingField: 160
   <TurretMaxYawAngle>k__BackingField: 55
   <ProjectileFireRate>k__BackingField: 2
@@ -34,3 +34,4 @@ MonoBehaviour:
     m_Bits: 64
   <VehicleHealth>k__BackingField: 100
   <EnemyHealth>k__BackingField: 30
+  <ControlType>k__BackingField: 0

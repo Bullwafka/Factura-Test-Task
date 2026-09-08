@@ -9,6 +9,7 @@ namespace Factura.Gameplay
         private Vector2 _pressPosition;
 
         public bool IsInputFired { get; private set; }
+        public Vector2 PointerScreenPosition { get; private set; }
         public Vector2 HorizontalDeltaNormalized { get; private set; }
 
         public void Tick()
@@ -51,6 +52,8 @@ namespace Factura.Gameplay
 
         private void UpdatePointer(Vector2 position, bool isHeld)
         {
+            PointerScreenPosition = position;
+
             if (isHeld && !IsInputFired)
             {
                 _pressPosition = position;
