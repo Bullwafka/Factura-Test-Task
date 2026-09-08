@@ -6,6 +6,7 @@ namespace Factura.Gameplay
     public sealed class VehicleMovementSystem : IFixedTickable
     {
         private readonly GameConfig _config;
+        private readonly VehicleEntity _vehicle;
         private readonly Rigidbody _body;
         private readonly float _roadCenterX;
 
@@ -16,10 +17,11 @@ namespace Factura.Gameplay
 
         public VehicleMovementSystem(
             GameConfig config,
-            GameSceneContext scene)
+            VehicleEntity vehicle)
         {
             _config = config;
-            _body = scene.Vehicle.Body;
+            _vehicle = vehicle;
+            _body = vehicle.View.Body;
             _roadCenterX = _body.position.x;
             _lateralTargetX = _roadCenterX;
             SchedulePause();
@@ -27,6 +29,9 @@ namespace Factura.Gameplay
 
         public void FixedTick()
         {
+            if (_vehicle.Health.IsDead)
+                return;
+
             var deltaTime = Time.fixedDeltaTime;
             UpdateLateralManeuver(deltaTime);
 

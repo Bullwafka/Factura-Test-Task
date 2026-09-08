@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3712830739382481653}
   - component: {fileID: 5456290737941307663}
+  - component: {fileID: 9028615445529041137}
   m_Layer: 0
   m_Name: GroundSegment
   m_TagString: Untagged
@@ -52,8 +53,22 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 12, y: 0.16, z: 15.999997}
+  m_Size: {x: 12, y: 0.16, z: 74.8}
   m_Center: {x: 0, y: -0.08, z: 0}
+--- !u!114 &9028615445529041137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 815890229051518096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d70927a8ef414aa7bd9a96d5784b3ec7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::Factura.Gameplay.LevelChunkView
+  _length: 74.8
+  _finishOffset: 35.4
 --- !u!1 &9025240204475175394
 GameObject:
   m_ObjectHideFlags: 0

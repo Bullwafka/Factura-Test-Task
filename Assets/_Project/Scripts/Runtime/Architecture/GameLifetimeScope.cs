@@ -11,13 +11,19 @@ namespace Factura.Gameplay
 
         [Header("Serialized scene references")]
         [SerializeField] private VehicleView _vehicle;
-        [SerializeField] private EnemyView[] _enemies;
         [SerializeField] private HudView _hud;
         [SerializeField] private Camera _gameCamera;
+        [SerializeField] private FinishGateView _finishGate;
+        [SerializeField] private Transform _levelRoot;
+
+        [Header("Level assets")]
+        [SerializeField] private LevelChunkView _levelChunkPrefab;
+        [SerializeField] private EnemyView _enemyPrefab;
 
         [Header("Projectile assets")]
         [SerializeField] private ProjectileView _projectilePrefab;
         [SerializeField] private ImpactEffectView _projectileImpactPrefab;
+        [SerializeField] private ImpactEffectView _enemyDeathEffectPrefab;
         [SerializeField] private Transform _projectileRoot;
 
         protected override void Configure(IContainerBuilder builder)
@@ -28,10 +34,22 @@ namespace Factura.Gameplay
 
         private void RegisterSystems(IContainerBuilder builder)
         {
+            builder.Register<DamageService>(Lifetime.Singleton).AsSelf().As<IDamageService>();
+            builder.Register<VehicleEntity>(Lifetime.Singleton).AsSelf();
+            builder.Register<LevelState>(Lifetime.Singleton).AsSelf();
+
             builder.RegisterEntryPoint<PlayerInputService>().As<IPlayerInputService>();
+            builder.RegisterEntryPoint<GameFlowSystem>();
             builder.RegisterEntryPoint<VehicleMovementSystem>();
             builder.RegisterEntryPoint<TurretControlSystem>();
             builder.RegisterEntryPoint<VehicleCameraFollowSystem>();
+            builder.RegisterEntryPoint<VehicleHealthHudSystem>();
+            builder.RegisterEntryPoint<EnemyDeathEffectSystem>().As<IEnemyDeathEffectService>();
+            builder.RegisterEntryPoint<EnemySystem>()
+                .As<IEnemySpawnService>()
+                .As<IEnemyTargetProvider>();
+            builder.RegisterEntryPoint<LevelGenerationSystem>();
+            builder.RegisterEntryPoint<LevelHudSystem>();
             builder.RegisterEntryPoint<ProjectileSystem>().As<IProjectileService>();
             builder.RegisterEntryPoint<TurretShootingSystem>();
 
@@ -61,9 +79,13 @@ namespace Factura.Gameplay
 
             builder.RegisterInstance(new GameSceneContext(
                 _vehicle,
-                _enemies,
+                _enemyPrefab,
+                _levelChunkPrefab,
+                _finishGate,
+                _levelRoot,
                 _hud,
                 _gameCamera,
+                _enemyDeathEffectPrefab,
                 _projectileRoot));
         }
     }

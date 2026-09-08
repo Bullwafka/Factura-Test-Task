@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Factura.Gameplay
 {
-    public sealed class EnemyView : MonoBehaviour
+    public sealed class EnemyView : MonoBehaviour, IPoolable
     {
         [SerializeField] private Transform _modelRoot;
         [SerializeField] private Transform _hitPoint;
@@ -15,5 +15,25 @@ namespace Factura.Gameplay
         public Rigidbody Body => _body;
         public Collider HitCollider => _hitCollider;
         public Animator Animator => _animator;
+
+        public void ChangePooledState(bool isPooled)
+        {
+            _animator.enabled = false;
+
+            _hitCollider.enabled = !isPooled;
+            gameObject.SetActive(!isPooled);
+        }
+
+        public void EnableAnimations()
+        {
+            _animator.enabled = true;
+            _animator.Rebind();
+            _animator.Update(0f);
+        }
+
+        public void DisableAnimations()
+        {
+            _animator.enabled = false;
+        }
     }
 }

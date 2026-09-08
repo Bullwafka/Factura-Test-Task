@@ -7,20 +7,25 @@ namespace Factura.Gameplay
     {
         private readonly ITurretAimProvider _aimProvider;
         private readonly GameConfig _config;
+        private readonly VehicleEntity _vehicle;
         private readonly Transform _turretPivot;
 
         public TurretControlSystem(
             ITurretAimProvider aimProvider,
             GameConfig config,
-            GameSceneContext scene)
+            VehicleEntity vehicle)
         {
             _aimProvider = aimProvider;
             _config = config;
-            _turretPivot = scene.Vehicle.TurretYawPivot;
+            _vehicle = vehicle;
+            _turretPivot = vehicle.View.TurretYawPivot;
         }
 
         public void Tick()
         {
+            if (_vehicle.Health.IsDead)
+                return;
+
             if (!_aimProvider.TryGetTargetYaw(out var targetYaw))
             {
                 return;

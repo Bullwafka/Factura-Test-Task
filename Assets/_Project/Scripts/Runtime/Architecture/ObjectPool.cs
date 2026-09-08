@@ -13,11 +13,13 @@ namespace Factura.Gameplay
     {
         private Stack<T> _pool;
         private T _prefab;
+        private Transform _root;
 
-        public ObjectPool(T prefab, int preInitInstances = 0)
+        public ObjectPool(T prefab, int preInitInstances = 0, Transform root = null)
         {
             _prefab = prefab;
             _pool = new Stack<T>(preInitInstances);
+            _root = root;
 
             Initialize(preInitInstances);
         }
@@ -35,7 +37,9 @@ namespace Factura.Gameplay
 
         private T Create()
         {
-            return UnityEngine.Object.Instantiate(_prefab);
+            return _root == null ? 
+                UnityEngine.Object.Instantiate(_prefab) : 
+                UnityEngine.Object.Instantiate(_prefab, _root);
         }
 
         public void Add(T obj)

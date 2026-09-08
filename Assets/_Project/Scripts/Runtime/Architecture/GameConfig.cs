@@ -1,3 +1,4 @@
+using Factura.Utils;
 using UnityEngine;
 
 namespace Factura.Gameplay
@@ -10,7 +11,12 @@ namespace Factura.Gameplay
     [CreateAssetMenu(fileName = "GameConfig", menuName = "Factura/Game Config")]
     public sealed class GameConfig : ScriptableObject
     {
-        [field: SerializeField, Min(10f)] public float LevelLength { get; private set; } = 120f;
+        [field: SerializeField, Min(5)] public int LevelChunkCount { get; private set; } = 12;
+        [field: SerializeField, Min(2)] public int ActiveLevelChunkCount { get; private set; } = 5;
+        [field: SerializeField, Min(1)] public int PostFinishChunkCount { get; private set; } = 3;
+        [field: SerializeField] public Utils.RangeInt EnemyCountPerChunkRange { get; private set; } = new(2, 4);
+        [field: SerializeField] public RangeFloat EnemyLaneOffset { get; private set; } = new(0.5f, 4f);
+        [field: SerializeField] public RangeFloat EnemySpawnPadding { get; private set; } = new(4f ,8f);
         [field: SerializeField, Min(1f)] public float VehicleSpeed { get; private set; } = 7f;
         [field: SerializeField, Min(0f)] public float VehicleLateralLimit { get; private set; } = 1.3f;
         [field: SerializeField, Min(0.01f)] public float VehicleLateralSpeed { get; private set; } = 0.45f;
@@ -30,6 +36,14 @@ namespace Factura.Gameplay
         [field: SerializeField] public LayerMask ProjectileHitMask { get; private set; } = ~0;
         [field: SerializeField, Min(1)] public int VehicleHealth { get; private set; } = 100;
         [field: SerializeField, Min(1)] public int EnemyHealth { get; private set; } = 30;
+        [field: SerializeField, Min(0)] public int TurretDamage { get; private set; } = 30;
+        [field: SerializeField, Min(0)] public int EnemyDamage { get; private set; } = 10;
+        [field: SerializeField, Min(0f)] public float EnemyAggroRadius { get; private set; } = 12f;
+        [field: SerializeField, Min(0f)] public float EnemyAttackRadius { get; private set; } = 1.5f;
+        [field: SerializeField, Min(0f)] public float EnemyMovementSpeed { get; private set; } = 2f;
+        [field: SerializeField, Min(0f)] public float EnemyTurnSpeed { get; private set; } = 360f;
+        [field: SerializeField, Min(0.01f)] public float EnemyAttackInterval { get; private set; } = 1.2f;
+        [field: SerializeField, Min(0.1f)] public float EnemyDeathEffectLifetime { get; private set; } = 1f;
         [field: SerializeField] public ControlType ControlType { get; private set; } = ControlType.Swipe;
     }
 }

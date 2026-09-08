@@ -21,7 +21,22 @@ namespace Factura.Gameplay
             public float Lifetime;
         }
 
+        private readonly struct ProjectileHit
+        {
+            public ProjectileHit(Collider collider, Vector3 point, Vector3 normal)
+            {
+                Collider = collider;
+                Point = point;
+                Normal = normal;
+            }
+
+            public Collider Collider { get; }
+            public Vector3 Point { get; }
+            public Vector3 Normal { get; }
+        }
+
         private readonly GameConfig _config;
+        private readonly IDamageService _damageService;
         private readonly ProjectileView _projectilePrefab;
         private readonly ImpactEffectView _impactPrefab;
 
@@ -30,12 +45,15 @@ namespace Factura.Gameplay
         private readonly ObjectPool<ImpactEffectView> _impactPool;
         private readonly ObjectPool<ProjectileView> _projectilePool;
         private readonly RaycastHit[] _hitBuffer = new RaycastHit[16];
+        private readonly Collider[] _overlapBuffer = new Collider[16];
 
-        public ProjectileSystem(GameConfig config, 
+        public ProjectileSystem(GameConfig config,
+            IDamageService damageService,
             ProjectileView projectilePrefab,
             ImpactEffectView impactPrefab)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
+            _damageService = damageService ?? throw new ArgumentNullException(nameof(damageService));
 
             _projectilePrefab = projectilePrefab ?? throw new ArgumentNullException(nameof(projectilePrefab));
             _impactPrefab = impactPrefab ?? throw new ArgumentNullException(nameof(impactPrefab));
@@ -74,8 +92,9 @@ namespace Factura.Gameplay
 
                 if (TryGetHit(state.View.transform.position, state.Direction, travelDistance, out var hit))
                 {
-                    state.View.transform.position = hit.point;
-                    SpawnImpact(hit.point, hit.normal);
+                    state.View.transform.position = hit.Point;
+                    _damageService.TryApplyDamage(hit.Collider, _config.TurretDamage);
+                    SpawnImpact(hit.Point, hit.Normal);
                     ReleaseProjectile(index, state.View);
                     continue;
                 }
@@ -109,8 +128,26 @@ namespace Factura.Gameplay
             Vector3 origin,
             Vector3 direction,
             float distance,
-            out RaycastHit closestHit)
+            out ProjectileHit closestHit)
         {
+            var overlapCount = Physics.OverlapSphereNonAlloc(
+                origin,
+                _config.ProjectileRadius,
+                _overlapBuffer,
+                _config.ProjectileHitMask,
+                QueryTriggerInteraction.Ignore);
+
+            if (overlapCount > 0)
+            {
+                var collider = _overlapBuffer[0];
+                var point = collider.ClosestPoint(origin);
+                if ((point - origin).sqrMagnitude <= 0.0001f)
+                    point = origin;
+
+                closestHit = new ProjectileHit(collider, point, -direction);
+                return true;
+            }
+
             var hitCount = Physics.SphereCastNonAlloc(
                 origin,
                 _config.ProjectileRadius,
@@ -120,7 +157,7 @@ namespace Factura.Gameplay
                 _config.ProjectileHitMask,
                 QueryTriggerInteraction.Ignore);
 
-            closestHit = default;
+            var hitResult = default(RaycastHit);
             var closestDistance = float.PositiveInfinity;
             for (var index = 0; index < hitCount; index++)
             {
@@ -131,10 +168,17 @@ namespace Factura.Gameplay
                 }
 
                 closestDistance = hit.distance;
-                closestHit = hit;
+                hitResult = hit;
             }
 
-            return closestDistance < float.PositiveInfinity;
+            if (closestDistance < float.PositiveInfinity)
+            {
+                closestHit = new ProjectileHit(hitResult.collider, hitResult.point, hitResult.normal);
+                return true;
+            }
+
+            closestHit = default;
+            return false;
         }
 
         private void ReleaseProjectile(int index, ProjectileView projectile)
