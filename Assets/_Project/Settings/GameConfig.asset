@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b92979b848b2ef844a4c43cfe1916841, type: 3}
+  m_Name: GameConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Factura.Gameplay.GameConfig
+  <LevelLength>k__BackingField: 120
+  <VehicleSpeed>k__BackingField: 7
+  <VehicleLateralLimit>k__BackingField: 1.15
+  <VehicleLateralSpeed>k__BackingField: 0.25
+  <VehicleLateralPauseRange>k__BackingField: {x: 5, y: 10}
+  <VehicleLateralDurationRange>k__BackingField: {x: 1, y: 2.5}
+  <TurretTurnSpeed>k__BackingField: 360
+  <TurretDragAngle>k__BackingField: 160
+  <TurretMaxYawAngle>k__BackingField: 55
+  <ProjectileFireRate>k__BackingField: 2
+  <ProjectileSpeed>k__BackingField: 50
+  <ProjectileLifetime>k__BackingField: 1.5
+  <ProjectileRadius>k__BackingField: 0.09
+  <ProjectileAimDistance>k__BackingField: 20
+  <ProjectileFallbackTargetHeight>k__BackingField: 1.05
+  <ProjectileHeightSampleRadius>k__BackingField: 1
+  <ProjectileImpactLifetime>k__BackingField: 0.6
+  <ProjectileHitMask>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 64
+  <VehicleHealth>k__BackingField: 100
+  <EnemyHealth>k__BackingField: 30
