@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b92979b848b2ef844a4c43cfe1916841, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: Assembly-CSharp::Factura.Gameplay.GameConfig
-  <LevelChunkCount>k__BackingField: 12
+  <LevelChunkCount>k__BackingField: 6
   <ActiveLevelChunkCount>k__BackingField: 5
   <PostFinishChunkCount>k__BackingField: 3
   <EnemyCountPerChunkRange>k__BackingField:
